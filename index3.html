@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Bank Of Amercia Business Banking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+:root{
+  --blue:#0b3d91;
+  --darkBlue:#062a66;
+  --red:#d90429;
+  --bg:#f4f7fb;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui;
+}
+
+body{background:var(--bg);}
+
+/* ================= LOGIN ================= */
+.loginPage{
+  height:100vh;
+  display:flex;
+}
+
+/* LEFT PANEL */
+.leftPanel{
+  flex:1;
+  background:linear-gradient(135deg,var(--blue),var(--darkBlue));
+  color:white;
+  padding:50px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* LOGO PLACEHOLDER (LOGIN) */
+.loginLogo{
+  width: 330px;
+  height:75px;
+  object-fit:cover;
+  margin-bottom:5px;
+  background:rgb(255, 255, 255);
+  border-radius:12px;
+  padding: 2%;
+}
+
+.offer{
+  background:rgba(255,255,255,0.12);
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+}
+
+/* RIGHT LOGIN */
+.rightPanel{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.loginBox{
+  width:340px;
+  background:white;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+input,select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+.btn{
+  width:100%;
+  padding:10px;
+  margin-top:15px;
+  border:none;
+  background:var(--red);
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.error{
+  color:red;
+  margin-top:10px;
+  font-size:13px;
+}
+
+/* ================= DASHBOARD ================= */
+.wrapper{
+  display:none;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:250px;
+  background:var(--blue);
+  color:white;
+  padding:20px;
+}
+
+/* LOGO PLACEHOLDER (SIDEBAR) */
+.sidebarLogo{
+  width:200px;
+  height:60px;
+  object-fit:cover;
+  background:white;
+  padding: 2px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+.nav div{
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.nav div:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+.main{flex:1;}
+
+.topbar{
+  background:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.container{padding:20px;}
+
+/* Recent Transfers Section */
+#recentTransfers {
+  list-style: none;
+  margin-top: 20px;
+  padding: 0;
+}
+
+#recentTransfers li {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  background-color: #e0e0e0; /* light grey background */
+  color: #000; /* black text */
+}
+
+#recentTransfers li.debit {
+  /* keep background light grey, only amount in red */
+}
+
+#recentTransfers li.credit {
+  /* keep background light grey, only amount in green */
+}
+
+#recentTransfers li .amount {
+  font-weight: bold;
+}
+
+#recentTransfers li.debit .amount {
+  color: #b00020; /* red for debit */
+}
+
+#recentTransfers li.credit .amount {
+  color: #00695c; /* green for credit */
+}
+
+/* other styles omitted for brevity, same as original... */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.card{
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+.transferBtn{
+  margin-top:15px;
+  padding:10px;
+  width:100%;
+  background:var(--blue);
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ================= MODAL ================= */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+}
+
+.box{
+  background:white;
+  width:420px;
+  padding:20px;
+  border-radius:14px;
+}
+
+.hidden{display:none;}
+
+#msg{margin-top:10px;}
+
+.red{color:red;}
+.green{color:green;}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div class="loginPage" id="loginPage">
+
+<div class="leftPanel">
+
+  <!-- 🔥 LOGIN LOGO PLACEHOLDER -->
+  <img src="Bank-of-America-Logo.png" class="loginLogo" alt="Login Logo" />
+
+  <h1>Business Banking</h1>
+  <p>Secure Business Banking Portal</p>
+
+  <div class="offer">💳 Credit Card Cashback up to 5%</div>
+  <div class="offer">🏦 Business Loans from 8.5%</div>
+  <div class="offer">📈 High Yield Savings Accounts</div>
+
+</div>
+
+<div class="rightPanel">
+
+  <div class="loginBox">
+    <h2>Log In</h2>
+
+    <input id="user" placeholder="Username" />
+    <input id="pass" type="password" placeholder="Password" />
+
+    <button class="btn" onclick="login()">Log In</button>
+    <div class="error" id="loginError"></div>
+  </div>
+
+</div>
+
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div class="wrapper" id="dashboard">
+
+<div class="sidebar">
+
+  <!-- 🔥 SIDEBAR LOGO PLACEHOLDER -->
+  <img src="Bank-of-America-Logo.png" class="sidebarLogo" alt="Bank Logo" />
+
+  <div class="nav">
+    <div>Dashboard</div>
+    <div>Accounts</div>
+    <div>Transfers</div>
+    <div onclick="logout()">Logout</div>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="topbar">
+  <div>
+    <h3 id="accountNameTop"></h3>
+    <small>Business Account</small>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="cards">
+
+  <div class="card">
+    Account Holder
+    <h2 id="accountNameCard"></h2>
+  </div>
+
+  <div class="card">
+    Business XX5840
+    <h2 id="bal">$1,724,580</h2>
+  </div>
+
+  <div class="card">
+    Business XX5809
+    <h2>$5,558,240</h2>
+  </div>
+
+</div>
+
+<button class="transferBtn" onclick="openModal()">
+  New Transfer
+</button>
+
+<!-- Recent Transfers Section -->
+<h3>Recent Transfers</h3>
+<ul id="recentTransfers"></ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal" id="modal">
+
+<div class="box">
+
+<h3>Transfer Funds</h3>
+
+<select id="type" onchange="switchForm()">
+  <option value="own">Own Accounts</option>
+  <option value="external">Other Bank Account</option>
+</select>
+
+<div id="ownForm">
+
+<select id="fromAcc">
+  <option value="checking">Business XX5840</option>
+  <option value="savings">Business XX5809</option>
+</select>
+
+<select id="toAcc">
+  <option value="savings">Business XX5809</option>
+  <option value="checking">Business XX5840</option>
+</select>
+
+</div>
+
+<div id="externalForm" class="hidden">
+
+<input id="name" placeholder="Recipient Name" />
+<input id="accNo" placeholder="Account Number" />
+<input id="routing" placeholder="Routing Number" />
+
+</div>
+
+<input id="amount" placeholder="Enter Amount" />
+
+<button class="btn" onclick="startTransfer()">Continue</button>
+
+<div id="otpBox" class="hidden">
+<input id="otp" placeholder="6-digit OTP" />
+<button class="btn" onclick="verifyTransfer()">Verify</button>
+</div>
+
+<div id="msg"></div>
+
+</div>
+
+</div>
+
+<script>
+const accountHolder = "HP Inc.";
+let balance = 1724580;
+
+// Array to store last 5 transfer objects
+const recentTransfers = [];
+
+// Function to update the display of recent transfers
+function updateRecentTransfers() {
+  const list = document.getElementById('recentTransfers');
+  list.innerHTML = ''; // Clear previous entries
+
+  recentTransfers.slice().reverse().forEach(entry => {
+    const li = document.createElement('li');
+    li.className = entry.type; // debit or credit for coloring
+
+    // Format date
+    const dateStr = new Date(entry.date).toLocaleString();
+
+    li.innerHTML = `
+      <div>
+        <strong>${entry.name}</strong> <br/>
+        <small>${dateStr}</small>
+      </div>
+      <div class="amount" style="width:100px;text-align:right;">$${entry.amount.toLocaleString()}</div>
+    `;
+    // Add color to amount
+    const amountDiv = li.querySelector('.amount');
+    if (entry.type === 'credit') {
+      amountDiv.style.color = '#00695c'; // green
+    } else {
+      amountDiv.style.color = '#b00020'; // red
+    }
+    list.appendChild(li);
+  });
+}
+
+/* LOGIN */
+function login() {
+  const u = document.getElementById("user").value;
+  const p = document.getElementById("pass").value;
+
+  if (u === "admin" && p === "1234") {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("dashboard").style.display = "flex";
+
+    document.getElementById("accountNameTop").innerText = accountHolder;
+    document.getElementById("accountNameCard").innerText = accountHolder;
+  } else {
+    document.getElementById("loginError").innerText = "Invalid credentials";
+  }
+}
+
+/* LOGOUT */
+function logout() {
+  location.reload();
+}
+
+/* MODAL */
+function openModal() {
+  document.getElementById("modal").style.display = "flex";
+}
+
+window.onclick = (e) => {
+  if (e.target === document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+  }
+};
+
+function switchForm() {
+  const type = document.getElementById("type");
+  const ownForm = document.getElementById("ownForm");
+  const externalForm = document.getElementById("externalForm");
+  if (type.value === "own") {
+    ownForm.classList.remove("hidden");
+    externalForm.classList.add("hidden");
+  } else {
+    externalForm.classList.remove("hidden");
+    ownForm.classList.add("hidden");
+  }
+}
+
+/* STEP 1 */
+function startTransfer() {
+  const msg = document.getElementById("msg");
+  msg.innerText = "";
+  msg.className = "";
+
+  const amt = Number(document.getElementById("amount").value);
+
+  if (!amt || amt <= 0) {
+    msg.className = "red";
+    msg.innerText = "Enter valid amount";
+    return;
+  }
+
+  if (document.getElementById("type").value === "external") {
+    const n = document.getElementById("name").value.trim();
+    const a = document.getElementById("accNo").value.trim();
+    const r = document.getElementById("routing").value.trim();
+
+    if (!n || !a || !r) {
+      msg.className = "red";
+      msg.innerText = "Fill recipient details";
+      return;
+    }
+  }
+
+  if (amt > balance) {
+    msg.className = "red";
+    msg.innerText = "Insufficient funds";
+    return;
+  }
+
+  document.getElementById("otpBox").classList.remove("hidden");
+}
+
+/* STEP 2 */
+function verifyTransfer() {
+  const otpVal = document.getElementById("otp").value;
+  const msg = document.getElementById("msg");
+  const amt = Number(document.getElementById("amount").value);
+  const recipientName = document.getElementById("name").value.trim() || "Self";
+
+  if (otpVal.length !== 6) {
+    msg.className = "red";
+    msg.innerText = "Invalid OTP";
+    return;
+  }
+
+  msg.innerText = "Processing transfer...";
+  msg.className = "";
+
+  setTimeout(() => {
+    // Deduct amount from balance
+    balance -= amt;
+    document.getElementById("bal").innerText = "$" + balance.toLocaleString();
+
+    // Prepare transfer record
+    const transfer = {
+      date: new Date(),
+      name: recipientName,
+      amount: amt,
+      type: "debit" // always debit from this account
+    };
+
+    // Add to recent transfers
+    recentTransfers.push(transfer);
+
+    // Keep only last 5
+    if (recentTransfers.length > 5) {
+      recentTransfers.shift();
+    }
+
+    // Update display
+    updateRecentTransfers();
+
+    // Reset form for next transfer
+    document.getElementById("otp").value = "";
+    document.getElementById("otpBox").classList.add("hidden");
+
+    msg.className = "green";
+    msg.innerText = "Transfer has been submitted successfully";
+
+    setTimeout(() => {
+      document.getElementById("modal").style.display = "none";
+    }, 4500);
+  }, 2500);
+}
+</script>
+
+</body>
+</html>
